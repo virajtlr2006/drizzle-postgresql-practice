@@ -4,6 +4,11 @@ import { bankTable } from "@/db/schema"
 import { db } from ".."
 import { eq } from "drizzle-orm";
 
+// Display all bank accounts of a user 
+export const userallAccountAction = async (email) => {
+    console.log(email)
+}
+
 
 // Create bank User
 export const BankAction = async (data) => {
