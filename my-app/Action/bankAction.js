@@ -9,9 +9,9 @@ export const userallAccountAction = async (email) => {
     console.log(email)
 }
 
-
 // Create bank User
 export const BankAction = async (data) => {
+    
     console.log(data);
 
     const newUser = await db.insert(bankTable).values(data)

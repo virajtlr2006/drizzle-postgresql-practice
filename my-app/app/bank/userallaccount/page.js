@@ -5,19 +5,21 @@ import React, { useEffect } from 'react'
 
 const page = () => {
 
-    const {email} = useCurrentUser()
+  const { email } = useCurrentUser()
 
-    useEffect(() => {
-        Userallaccount()
-    }, [email])
-     
+  const Userallaccount = async () => {
+    if(!email) return
 
-    const Userallaccount = async () => {
-      
-        userallAccountAction(email)
-        console.log(email)
+    await userallAccountAction(email)
+    console.log(email)
 
-    }
+  }
+
+  useEffect(() => {
+      Userallaccount()
+  }, [email])
+
+
   return (
     <div>
       user all accounts
