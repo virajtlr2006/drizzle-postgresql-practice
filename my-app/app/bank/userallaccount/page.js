@@ -9,6 +9,7 @@ const page = () => {
 
   const { email } = useCurrentUser()
 
+
   useEffect(() => {
     Userallaccount()
   }, [email])
@@ -24,7 +25,7 @@ const page = () => {
   return (
     <div>
       {useraccounts && useraccounts.map((a) =>
-        <a key={a._id}>
+        <a href='/bank/singleaccount' key={a._id}>
           <p>{a.bankname}</p>
         </a>)}
     </div>

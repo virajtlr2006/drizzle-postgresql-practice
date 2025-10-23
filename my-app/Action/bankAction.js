@@ -6,19 +6,29 @@ import { eq } from "drizzle-orm";
 
 // Display all bank accounts of a user 
 export const userallAccountAction = async (email) => {
-    console.log(email)
+    // console.log(email)
     const useraccounts = await db.select().from(bankTable).where(eq(bankTable.email,email))
     // console.log(useraccounts);
     return useraccounts
 }
 
+// Single Account
+export const singleAccountAction = async (email) => {
+    // console.log(email)
+    const singleaccount = await db.select().from(bankTable).where(eq(bankTable.email,email))
+
+    console.log(singleaccount)
+
+    // return singleaccount
+}
+
 // Create bank User
 export const BankAction = async (data) => {
 
-    console.log(data);
+    // console.log(data);
 
     const newUser = await db.insert(bankTable).values(data)
-    console.log(newUser);
+    // console.log(newUser);
     
     return true
 }
