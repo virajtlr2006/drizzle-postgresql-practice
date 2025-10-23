@@ -1,28 +1,32 @@
 'use client'
 import { userallAccountAction } from '@/Action/bankAction'
 import { useCurrentUser } from '@/hook/userhook'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const page = () => {
 
+  const [useraccounts, setuseraccounts] = useState(null)
+
   const { email } = useCurrentUser()
 
-  const Userallaccount = async () => {
-    if(!email) return
-
-    await userallAccountAction(email)
-    console.log(email)
-
-  }
-
   useEffect(() => {
-      Userallaccount()
+    Userallaccount()
   }, [email])
+
+
+  const Userallaccount = async () => {
+    if (!email) return
+    const accounts = await userallAccountAction(email)
+    setuseraccounts(accounts);
+  }
 
 
   return (
     <div>
-      user all accounts
+      {useraccounts && useraccounts.map((a) =>
+        <a key={a._id}>
+          <p>{a.bankname}</p>
+        </a>)}
     </div>
   )
 }
