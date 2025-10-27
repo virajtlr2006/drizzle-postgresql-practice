@@ -14,12 +14,12 @@ export const userallAccountAction = async (email) => {
 
 // Single Account
 export const singleAccountAction = async (id) => {
-    console.log("124",id)
+    // console.log("124",id)
     if (!id) return [];
 
     const single = await db.select().from(bankTable).where(eq(bankTable.id,id))
 
-    // console.log(single)
+    console.log(single)
     return single
 }
 
