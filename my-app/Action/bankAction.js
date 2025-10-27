@@ -13,13 +13,13 @@ export const userallAccountAction = async (email) => {
 }
 
 // Single Account
-export const singleAccountAction = async (email) => {
-    // console.log(email)
-    const singleaccount = await db.select().from(bankTable).where(eq(bankTable.email,email))
+export const singleAccountAction = async (upiid) => {
+    // console.log(upiid)
+    if (!upiid) return [];
 
-    console.log(singleaccount)
-
-    // return singleaccount
+    const single = await db.select().from(bankTable).where(eq(bankTable.upiid,upiid))
+    // console.log(single)
+    return single
 }
 
 // Create bank User
