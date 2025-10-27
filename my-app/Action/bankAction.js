@@ -19,8 +19,8 @@ export const singleAccountAction = async (id) => {
 
     const single = await db.select().from(bankTable).where(eq(bankTable.id,id))
 
-    console.log(single)
-    return single
+    console.log(single[0])
+    return single[0]
 }
 
 // Create bank User

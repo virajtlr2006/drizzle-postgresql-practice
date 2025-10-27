@@ -25,7 +25,7 @@ const page = () => {
   return (
     <div>
       {useraccounts && useraccounts.map((a) =>
-        <a href='/bank/:id' key={a._id}>
+        <a href={`/bank/${a.id}`} key={a._id}>
           <p>{a.bankname}</p>
         </a>)}
     </div>

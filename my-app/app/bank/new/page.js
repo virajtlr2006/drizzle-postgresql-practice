@@ -23,8 +23,12 @@ const page = () => {
       <input {...register("bankname", { required: true })} />
       {errors.bankname && <span>This field is required</span>}
 
+      <input {...register("upiid", { required: true })} />
+      {errors.upiid && <span>This field is required</span>}
+
       <input {...register("pin", { required: true })} />
       {errors.pin && <span>This field is required</span>}
+
 
       <input type="submit" />
     </form>
