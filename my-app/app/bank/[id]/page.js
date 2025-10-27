@@ -2,7 +2,7 @@
 
 import { singleAccountAction } from '@/Action/bankAction'
 import { EyeIcon } from 'lucide-react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useForm } from "react-hook-form"
 import {
@@ -13,6 +13,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 
 const page = () => {
 
@@ -23,9 +24,12 @@ const page = () => {
         formState: { errors },
     } = useForm()
 
+    const router = useRouter()
+
     const [singleacc, setSingleacc] = useState(null)
     const [showbalance, setshowbalance] = useState(false)
     const [isPin, setIsPin] = useState(false)
+    const [wrongPIN, setwrongPIN] = useState(false)
 
     useEffect(() => {
         single()
@@ -45,15 +49,28 @@ const page = () => {
     }
 
     const verifyPIN = async (data) => {
-        console.log(data);
-        
+        console.log(data.pin);
+        console.log(singleacc.pin);
+        if (data.pin == singleacc.pin) {
+            setshowbalance(true)
+            setIsPin(false)
+        }
+        else {
+            setwrongPIN(true)
+        }
+    }
+
+    const pay = async () => {
+        console.log("Pay");
+        router.push(`./pay/${id}`)
     }
     return (
         <div>
             {singleacc && <>
                 <p>{singleacc.bankname}</p>
+                <p>{singleacc.upiid}</p>
 
-                {showbalance && <p>{singleacc.balance}</p>}
+                {showbalance ? <p>{singleacc.balance}</p> : <>xxxx</>}
                 <EyeIcon onClick={togglepin} />
             </>}
 
@@ -63,17 +80,22 @@ const page = () => {
                     <DialogHeader>
                         <DialogTitle>Enter security PIN</DialogTitle>
                         <DialogDescription>
-                            <form onSubmit={handleSubmit(verifyPIN)}>
+                            <div>
 
-                                <input {...register("pin", { required: true })} />
-                                {errors.pin && <span>This field is required</span>}
+                                <form onSubmit={handleSubmit(verifyPIN)}>
 
-                                <input type="submit" />
-                            </form>
+                                    <input {...register("pin", { required: true })} />
+                                    {errors.pin && <span>This field is required</span>}
+                                    {wrongPIN && <p>Enter Correct PIN</p>}
+                                    <input type="submit" />
+                                </form>
+                            </div>
                         </DialogDescription>
                     </DialogHeader>
                 </DialogContent>
             </Dialog>
+
+            <Button onClick={pay}>Pay</Button>
         </div>
     )
 }
