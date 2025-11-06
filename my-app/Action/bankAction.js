@@ -38,20 +38,27 @@ export const BankAction = async (data) => {
 export const PayAction = async (supiid, rupiid, amount) => {
     // console.log(id)
 
+
     const pay = await db.select().from(bankTable).where(eq(bankTable.upiid, supiid))
     // console.log(pay[0].balance)
+    if (amount > pay[0].balance) throw new Error("Balance Insufficient");
+
     const newbalance = pay[0].balance - amount
     // console.log(newbalance);
     const updatedbalance = await db.update(bankTable).set({ balance: newbalance }).where(eq(bankTable.upiid, supiid));
     // console.log(newbalance)
 
+    try {
+        const recieve = await db.select().from(bankTable).where(eq(bankTable.upiid, rupiid))
+        console.log(recieve);
 
-    const recieve = await db.select().from(bankTable).where(eq(bankTable.upiid, rupiid))
-    console.log(recieve[0].balance)
-    const nbalance = recieve[0].balance + amount
-    console.log(Number(recieve[0].balance)+amount)
-    const ubalance = await db.update(bankTable).set({ balance: nbalance }).where(eq(bankTable.upiid, rupiid));
-    // console.log(ubalance);
-    
+        // console.log(recieve[0].balance)
+        const nbalance = recieve[0].balance + Number(amount)
+        console.log(Number(recieve[0].balance) + Number(amount))
+        const ubalance = await db.update(bankTable).set({ balance: nbalance }).where(eq(bankTable.upiid, rupiid));
+        // console.log(ubalance);
+    } catch (error) {
+        throw new Error("Incorrect UpiID");
+    }
     return
 }
