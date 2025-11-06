@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 // Display all bank accounts of a user 
 export const userallAccountAction = async (email) => {
     // console.log(email)
-    const useraccounts = await db.select().from(bankTable).where(eq(bankTable.email,email))
+    const useraccounts = await db.select().from(bankTable).where(eq(bankTable.email, email))
     // console.log(useraccounts);
     return useraccounts
 }
@@ -17,7 +17,7 @@ export const singleAccountAction = async (id) => {
     // console.log("124",id)
     if (!id) return [];
 
-    const single = await db.select().from(bankTable).where(eq(bankTable.id,id))
+    const single = await db.select().from(bankTable).where(eq(bankTable.id, id))
 
     console.log(single[0])
     return single[0]
@@ -30,6 +30,28 @@ export const BankAction = async (data) => {
 
     const newUser = await db.insert(bankTable).values(data)
     // console.log(newUser);
-    
+
     return true
+}
+
+// Payment
+export const PayAction = async (supiid, rupiid, amount) => {
+    // console.log(id)
+
+    const pay = await db.select().from(bankTable).where(eq(bankTable.upiid, supiid))
+    // console.log(pay[0].balance)
+    const newbalance = pay[0].balance - amount
+    // console.log(newbalance);
+    const updatedbalance = await db.update(bankTable).set({ balance: newbalance }).where(eq(bankTable.upiid, supiid));
+    // console.log(newbalance)
+
+
+    const recieve = await db.select().from(bankTable).where(eq(bankTable.upiid, rupiid))
+    console.log(recieve[0].balance)
+    const nbalance = recieve[0].balance + amount
+    console.log(Number(recieve[0].balance)+amount)
+    const ubalance = await db.update(bankTable).set({ balance: nbalance }).where(eq(bankTable.upiid, rupiid));
+    // console.log(ubalance);
+    
+    return
 }

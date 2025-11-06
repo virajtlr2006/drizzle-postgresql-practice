@@ -30,6 +30,7 @@ const page = () => {
     const [showbalance, setshowbalance] = useState(false)
     const [isPin, setIsPin] = useState(false)
     const [wrongPIN, setwrongPIN] = useState(false)
+    const [upiid, setUpiid] = useState(null)
 
     useEffect(() => {
         single()
@@ -39,7 +40,7 @@ const page = () => {
     const { id } = useParams()
     const single = async () => {
         const oneacc = await singleAccountAction(id)
-        console.log(oneacc);
+        setUpiid(oneacc.upiid);
 
         setSingleacc(oneacc)
     }
@@ -62,7 +63,7 @@ const page = () => {
 
     const pay = async () => {
         console.log("Pay");
-        router.push(`./pay/${id}`)
+        router.push(`./pay/${upiid}`)
     }
     return (
         <div>

@@ -13,7 +13,7 @@ export const useCurrentUser = () => {
   })
   
   // Clerk: get user object and loading state
-  const { user, isLoaded } = useUser()
+  const { user, isLoaded } = useUser()  
 
   // Effect: sync Clerk user data into local state when loaded
   useEffect(() => {
