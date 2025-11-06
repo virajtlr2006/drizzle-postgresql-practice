@@ -19,7 +19,7 @@ export const singleAccountAction = async (id) => {
 
     const single = await db.select().from(bankTable).where(eq(bankTable.id, id))
 
-    console.log(single[0])
+    // console.log(single[0])
     return single[0]
 }
 
@@ -35,30 +35,37 @@ export const BankAction = async (data) => {
 }
 
 // Payment
-export const PayAction = async (supiid, rupiid, amount) => {
+// Required things taken in params
+export const PayAction = async (supiid, rupiid, amount, pin) => {
     // console.log(id)
 
-
-    const pay = await db.select().from(bankTable).where(eq(bankTable.upiid, supiid))
-    // console.log(pay[0].balance)
+    const pay = await db.select().from(bankTable).where(eq(bankTable.upiid, supiid)) //User searched in table using upiid
+    console.log(pay[0].pin)
+    // Balance Checked
     if (amount > pay[0].balance) throw new Error("Balance Insufficient");
-
+    // Balance Updated
     const newbalance = pay[0].balance - amount
     // console.log(newbalance);
     const updatedbalance = await db.update(bankTable).set({ balance: newbalance }).where(eq(bankTable.upiid, supiid));
     // console.log(newbalance)
 
-    try {
-        const recieve = await db.select().from(bankTable).where(eq(bankTable.upiid, rupiid))
-        console.log(recieve);
+    if (pin != pay[0].pin) throw new Error("Pin Incorrect");//For incoorect PIN
 
+
+    // Reciever's end
+    try {
+        // Find reciever using upiid inserted by a sender
+        const recieve = await db.select().from(bankTable).where(eq(bankTable.upiid, rupiid))
+        // console.log(recieve);
         // console.log(recieve[0].balance)
+
+        // Balance updated
         const nbalance = recieve[0].balance + Number(amount)
-        console.log(Number(recieve[0].balance) + Number(amount))
+        // console.log(Number(recieve[0].balance) + Number(amount))
         const ubalance = await db.update(bankTable).set({ balance: nbalance }).where(eq(bankTable.upiid, rupiid));
         // console.log(ubalance);
     } catch (error) {
-        throw new Error("Incorrect UpiID");
+        throw new Error("Incorrect UpiID"); //Throw error if UpiID is incoorect
     }
     return
 }
