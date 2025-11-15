@@ -1,10 +1,14 @@
 'use client'
 import { BankAction } from '@/Action/bankAction'
 import { useCurrentUser } from '@/hook/userhook'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm } from "react-hook-form"
 
 const page = () => {
+
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
@@ -15,7 +19,8 @@ const page = () => {
   const { email } = useCurrentUser()
 
   const onSubmit = async (user) => {
-    BankAction({ ...user, email })
+    await BankAction({ ...user, email })
+     router.back("/")
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
