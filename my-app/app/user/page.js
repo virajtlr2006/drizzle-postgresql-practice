@@ -8,7 +8,6 @@ const {email,imageUrl,fullName} = useCurrentUser()
   return (
     <div>
       {email}
-      <img src={imageUrl}/>
       {fullName}
     </div>
   )

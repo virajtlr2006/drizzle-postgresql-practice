@@ -8,7 +8,6 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs'
-import Navbar from "@/components/ui/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,9 +28,8 @@ export default function RootLayout({ children }) {
   return (
     
      <ClerkProvider> 
-      <Navbar/>
       <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <body>
           {children}
         </body>
       </html>

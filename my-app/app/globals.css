@@ -118,3 +118,159 @@
     @apply bg-background text-foreground;
   }
 }
+
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Updated to dark fintech theme with blue accents */
+  --background: #0a0e27;
+  --foreground: #ffffff;
+  --card: #1a1f3a;
+  --card-foreground: #ffffff;
+  --popover: #1a1f3a;
+  --popover-foreground: #ffffff;
+  --primary: #0a74ff;
+  --primary-foreground: #ffffff;
+  --secondary: #1a1f3a;
+  --secondary-foreground: #ffffff;
+  --muted: #2d3347;
+  --muted-foreground: #a0a8b8;
+  --accent: #0a74ff;
+  --accent-foreground: #ffffff;
+  --destructive: #ff3b30;
+  --destructive-foreground: #ffffff;
+  --border: #2d3347;
+  --input: #1a1f3a;
+  --ring: #0a74ff;
+  --chart-1: #0a74ff;
+  --chart-2: #00d4ff;
+  --chart-3: #6366f1;
+  --chart-4: #8b5cf6;
+  --chart-5: #0a74ff;
+  --radius: 1rem;
+  --sidebar: #1a1f3a;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #0a74ff;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #0a74ff;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #2d3347;
+  --sidebar-ring: #0a74ff;
+}
+
+.dark {
+  /* Dark mode already set as default for fintech */
+  --background: #0a0e27;
+  --foreground: #ffffff;
+  --card: #1a1f3a;
+  --card-foreground: #ffffff;
+  --popover: #1a1f3a;
+  --popover-foreground: #ffffff;
+  --primary: #0a74ff;
+  --primary-foreground: #ffffff;
+  --secondary: #1a1f3a;
+  --secondary-foreground: #ffffff;
+  --muted: #2d3347;
+  --muted-foreground: #a0a8b8;
+  --accent: #0a74ff;
+  --accent-foreground: #ffffff;
+  --destructive: #ff3b30;
+  --destructive-foreground: #ffffff;
+  --border: #2d3347;
+  --input: #1a1f3a;
+  --ring: #0a74ff;
+  --chart-1: #0a74ff;
+  --chart-2: #00d4ff;
+  --chart-3: #6366f1;
+  --chart-4: #8b5cf6;
+  --chart-5: #0a74ff;
+  --sidebar: #1a1f3a;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #0a74ff;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #0a74ff;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #2d3347;
+  --sidebar-ring: #0a74ff;
+}
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Add glow and fintech premium effects */
+@layer utilities {
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(10, 116, 255, 0.3), 0 0 40px rgba(10, 116, 255, 0.2);
+  }
+
+  .glow-blue-lg {
+    box-shadow: 0 0 40px rgba(10, 116, 255, 0.4), 0 0 80px rgba(10, 116, 255, 0.25);
+  }
+
+  .glow-border {
+    border-color: rgba(10, 116, 255, 0.5);
+    box-shadow: inset 0 0 20px rgba(10, 116, 255, 0.1), 0 0 20px rgba(10, 116, 255, 0.2);
+  }
+
+  .gradient-blue {
+    background: linear-gradient(135deg, #0a74ff 0%, #00d4ff 100%);
+  }
+
+  .gradient-dark {
+    background: linear-gradient(135deg, #1a1f3a 0%, #0f1324 100%);
+  }
+
+  .card-elevated {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  }
+}

@@ -34,7 +34,14 @@ const page = () => {
       <input {...register("pin", { required: true })} />
       {errors.pin && <span>This field is required</span>}
 
+      <input {...register("balance", { required: true })} />
+      {errors.balance && <span>This field is required</span>}
 
+      <select name='type' {...register("type", { required: true })}>
+        <option value='Savings'>Saving Account</option>
+        <option value='Current'>Current Account</option>
+        <option value='Salary'>Salary Account</option>
+      </select>
       <input type="submit" />
     </form>
   )

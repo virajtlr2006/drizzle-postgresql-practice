@@ -1,10 +1,12 @@
-import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
+import { integer, pgTable, varchar, sql } from "drizzle-orm/pg-core";
 
 export const bankTable = pgTable("bank", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  upiid: varchar().notNull(),
-  bankname : varchar().notNull(),
-  email : varchar().notNull(),
-  balance : integer().default(0),
-  pin : integer().unique()
+
+  upiid: varchar("upiid").notNull(),
+  bankname: varchar("bankname").notNull(),
+  email: varchar("email").notNull(),
+  balance: integer("balance").default(0),
+  pin: integer("pin").unique(),
+  type: varchar("type").default("Savings"),
 });
