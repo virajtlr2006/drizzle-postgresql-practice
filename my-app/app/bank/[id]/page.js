@@ -1,18 +1,9 @@
 'use client'
 
 import { singleAccountAction } from '@/Action/bankAction'
-import { EyeIcon } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useForm } from "react-hook-form"
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Eye, EyeOff, Copy, Send } from 'lucide-react';
 
@@ -46,22 +37,6 @@ const page = () => {
 
         setSingleacc(oneacc)
     }
-
-    // const togglepin = async () => {
-    //     setIsPin(true)
-    // }
-
-    // const verifyPIN = async (data) => {
-    //     console.log(data.pin);
-    //     console.log(singleacc.pin);
-    //     if (data.pin == singleacc.pin) {
-    //         setshowbalance(true)
-    //         setIsPin(false)
-    //     }
-    //     else {
-    //         setwrongPIN(true)
-    //     }
-    // }
 
 
     // PIN
