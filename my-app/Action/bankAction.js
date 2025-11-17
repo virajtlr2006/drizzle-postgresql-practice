@@ -37,10 +37,10 @@ export const BankAction = async (data) => {
 // Payment
 // Required things taken in params
 export const PayAction = async (supiid, rupiid, amount, pin) => {
-    // console.log(id)
+    console.log("BAckend sPIN",supiid)
 
     const pay = await db.select().from(bankTable).where(eq(bankTable.upiid, supiid)) //User searched in table using upiid
-    console.log(pay[0].pin)
+    console.log(pay)
     // Balance Checked
     if (amount > pay[0].balance) throw new Error("Balance Insufficient");
     // Balance Updated
@@ -69,4 +69,3 @@ export const PayAction = async (supiid, rupiid, amount, pin) => {
     }
     return
 }
-
