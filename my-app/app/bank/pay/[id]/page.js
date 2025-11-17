@@ -46,7 +46,8 @@ export default function App() {
     console.log("pay")
     try {
       console.log(storePIN)
-      const pay = await PayAction(id, bankdata.recieverupiid, bankdata.amount, storePIN);
+      const newdate = new Date()
+      const pay = await PayAction(id , bankdata.recieverupiid, bankdata.amount, storePIN,newdate);
       setPaymentsuccess(true)
       setIspay(false)
       setIspin(false)

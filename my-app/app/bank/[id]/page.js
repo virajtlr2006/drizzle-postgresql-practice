@@ -33,22 +33,24 @@ const page = () => {
     const { id } = useParams()
     const single = async () => {
         const oneacc = await singleAccountAction(id)
+        // console.log(oneacc.upiid);
         setUpiid(oneacc.upiid);
+        console.log(upiid);
 
         setSingleacc(oneacc)
     }
 
 
     // PIN
-    
-    const handleRevealBalance =async (data) => {
+
+    const handleRevealBalance = async (data) => {
         const enteredPin = data.pin?.trim();
         const actualPin = singleacc.pin?.toString();
-        
+
         if (enteredPin === actualPin) {
             setIsBalanceRevealed(true);
             setPinInput(''); // clear input
-            
+
 
         } else {
             alert('Incorrect PIN');
@@ -65,7 +67,8 @@ const page = () => {
 
     const pay = async () => {
         console.log("Pay");
-        router.push(`./pay/${upiid}`)
+        const oneacc = await singleAccountAction(id)
+        router.push(`./pay/${oneacc.upiid}`)
     }
 
     const copyToClipboard = (text) => {

@@ -1,6 +1,6 @@
 'use server'
 
-import { bankTable } from "@/db/schema"
+import { bankTable, TransactionTable } from "@/db/schema"
 import { db } from ".."
 import { eq } from "drizzle-orm";
 
@@ -36,8 +36,8 @@ export const BankAction = async (data) => {
 
 // Payment
 // Required things taken in params
-export const PayAction = async (supiid, rupiid, amount, pin) => {
-    console.log("BAckend sPIN",supiid)
+export const PayAction = async (supiid, rupiid, amount, pin,date) => {
+    console.log("BAckend ",supiid, rupiid, amount, pin,date)
 
     const pay = await db.select().from(bankTable).where(eq(bankTable.upiid, supiid)) //User searched in table using upiid
     console.log(pay)
@@ -47,6 +47,9 @@ export const PayAction = async (supiid, rupiid, amount, pin) => {
     const newbalance = pay[0].balance - amount
     // console.log(newbalance);
     const updatedbalance = await db.update(bankTable).set({ balance: newbalance }).where(eq(bankTable.upiid, supiid));
+
+    const paytype = "Debit"
+    const newTransaction = await db.insert(TransactionTable).values({reciverupiid:rupiid,senderupiid:supiid,amount:amount,type:paytype,date:date})
     // console.log(newbalance)
 
     if (pin != pay[0].pin) throw new Error("Pin Incorrect");//For incoorect PIN
@@ -63,6 +66,8 @@ export const PayAction = async (supiid, rupiid, amount, pin) => {
         const nbalance = recieve[0].balance + Number(amount)
         // console.log(Number(recieve[0].balance) + Number(amount))
         const ubalance = await db.update(bankTable).set({ balance: nbalance }).where(eq(bankTable.upiid, rupiid));
+        // const type = await db.insert(TransactionTable).values(supiid, rupiid, amount, ) 
+        
         // console.log(ubalance);
     } catch (error) {
         throw new Error("Incorrect UpiID"); //Throw error if UpiID is incoorect
