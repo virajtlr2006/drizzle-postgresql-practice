@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Eye, EyeOff, ArrowLeft, Send, Lock, X, Check, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { PayAction } from '@/Action/bankAction';
 
 export default function PaymentPage() {
   const [errormsg, setErrormsg] = useState(null);
@@ -22,6 +23,7 @@ export default function PaymentPage() {
   const [pin, setPin] = useState('');
   const [pinError, setPinError] = useState('');
   const [successData, setSuccessData] = useState({ upi: '', amount: '', bankName: '' });
+  
 
   const handleVerifyPIN = (data) => {
     if (data.pin ===  pin.pin) {
@@ -39,7 +41,7 @@ export default function PaymentPage() {
     }
   };
 
-  const processPayment = () => {
+  const processPayment = async() => {
     setIsProcessing(true);
     setTimeout(() => {
       setIsProcessing(false);

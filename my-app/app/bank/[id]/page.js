@@ -40,12 +40,15 @@ const page = () => {
 
 
     // PIN
-    const handleRevealBalance = (data) => {
+    
+    const handleRevealBalance =async (data) => {
         const enteredPin = data.pin?.trim();
         const actualPin = singleacc.pin?.toString();
+        
         if (enteredPin === actualPin) {
             setIsBalanceRevealed(true);
             setPinInput(''); // clear input
+            
 
         } else {
             alert('Incorrect PIN');
