@@ -37,7 +37,7 @@ export const BankAction = async (data) => {
 // Payment
 // Required things taken in params
 export const PayAction = async (supiid, rupiid, amount, pin,date) => {
-    console.log("BAckend ",supiid, rupiid, amount, pin,date)
+    // console.log("Backend ",supiid, rupiid, amount, pin,date)
 
     const pay = await db.select().from(bankTable).where(eq(bankTable.upiid, supiid)) //User searched in table using upiid
     console.log(pay)
@@ -70,7 +70,7 @@ export const PayAction = async (supiid, rupiid, amount, pin,date) => {
         reciverupiid: rupiid,
         senderupiid: supiid,
         amount: amount,
-        type: "Transfer", // Generic type, the display logic will determine debit/credit
+        type: "Debit", // Generic type, the display logic will determine debit/credit
         date: date
     })
     

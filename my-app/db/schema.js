@@ -7,7 +7,7 @@ export const bankTable = pgTable("bank", {
   bankname: varchar("bankname").notNull(),
   email: varchar("email").notNull(),
   balance: integer("balance").default(0),
-  pin: integer("pin").unique(),
+  pin: integer("pin").notNull(),
   type: varchar("type").default("Savings"),
 });
 
