@@ -13,9 +13,9 @@ export const bankTable = pgTable("bank", {
 
 export const TransactionTable = pgTable("transaction", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  reciverupiid: varchar("upiid").notNull(),
-  senderupiid: varchar("upiid").notNull(),
-  amount: integer("balance").default(0),
+  reciverupiid: varchar("receiver_upiid").notNull(),
+  senderupiid: varchar("sender_upiid").notNull(),
+  amount: integer("amount").default(0),
   type: varchar("type").default("Credit"),
   date: date()
 });

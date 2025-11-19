@@ -1,5 +1,5 @@
 'use client'
-import { userallAccountAction } from '@/Action/bankAction'
+import { userallAccountAction, getUserTransactionsAction } from '@/Action/bankAction'
 import { useCurrentUser } from '@/hook/userhook'
 import React, { useEffect, useState } from 'react'
 import {
@@ -20,20 +20,22 @@ import { getTypeIcon } from '.'
 import { EyeIcon } from 'lucide-react'
 import { EyeOff } from 'lucide-react'
 import { IndianRupee } from 'lucide-react'
-import { ArrowUpRight, ArrowDownLeft, Zap } from 'lucide-react'
-
+import { ArrowUpRight, ArrowDownLeft, ArrowRight, Zap } from 'lucide-react'
 const page = () => {
 
   //Stored data of useraccount
   const [useraccounts, setuseraccounts] = useState(null)
   const [totalbalance, setTotalbalance] = useState(0)
   const [isBalance, setIsBalance] = useState(false)
+  const [transactions, setTransactions] = useState([])
+  const [isLoadingTransactions, setIsLoadingTransactions] = useState(false)
 
   const { email } = useCurrentUser() //Email retrived using hook
 
 
   useEffect(() => {
     Userallaccount()
+    fetchUserTransactions()
   }, [email])
 
 
@@ -48,6 +50,20 @@ const page = () => {
     setTotalbalance(balance)
   }
 
+  const fetchUserTransactions = async () => {
+    if (!email) return
+    setIsLoadingTransactions(true)
+    try {
+      const userTransactions = await getUserTransactionsAction(email)
+      console.log('User transactions received in frontend:', userTransactions)
+      setTransactions(userTransactions)
+    } catch (error) {
+      console.error('Error fetching transactions:', error)
+    } finally {
+      setIsLoadingTransactions(false)
+    }
+  }
+
   const togglebalance = async () => {
     setIsBalance(!isBalance)
   }
@@ -60,63 +76,24 @@ const page = () => {
     { image: Eye, name: 'View Details' },
   ]
 
-  // Recent Transactions
-  const transactions = [
-    {
-      id: 1,
-      type: 'sent',
-      name: 'Sarah Mitchell',
-      description: 'Payment transfer',
-      amount: '-$250.00',
-      time: '2 hours ago',
-      icon: ArrowUpRight,
-    },
-    {
-      id: 2,
-      type: 'received',
-      name: 'Tech Corp Inc',
-      description: 'Salary deposit',
-      amount: '+$3,500.00',
-      time: '1 day ago',
-      icon: ArrowDownLeft,
-    },
-    {
-      id: 3,
-      type: 'sent',
-      name: 'Electric Company',
-      description: 'Utility payment',
-      amount: '-$145.32',
-      time: '2 days ago',
-      icon: Zap,
-    },
-    {
-      id: 4,
-      type: 'received',
-      name: 'Freelance Project',
-      description: 'Project payment',
-      amount: '+$800.00',
-      time: '3 days ago',
-      icon: ArrowDownLeft,
-    },
-    {
-      id: 5,
-      type: 'sent',
-      name: 'Coffee Shop',
-      description: 'Purchase',
-      amount: '-$12.50',
-      time: '4 days ago',
-      icon: ArrowUpRight,
-    },
-    {
-      id: 6,
-      type: 'sent',
-      name: 'Streaming Service',
-      description: 'Subscription',
-      amount: '-$15.99',
-      time: '5 days ago',
-      icon: ArrowUpRight,
-    },
-  ]
+  // Format date helper
+  const formatDate = (dateString) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60))
+    
+    if (diffInHours < 1) return 'Just now'
+    if (diffInHours < 24) return `${diffInHours} hours ago`
+    const diffInDays = Math.floor(diffInHours / 24)
+    if (diffInDays === 1) return '1 day ago'
+    return `${diffInDays} days ago`
+  }
+
+  // Format amount helper
+  const formatAmount = (amount, isUserSender) => {
+    const sign = isUserSender ? '-' : '+'
+    return `${sign}₹${amount}`
+  }
 
   return (
 
@@ -236,32 +213,82 @@ const page = () => {
             <h3 className="text-lg font-bold text-foreground">Recent Activity</h3>
 
             <div className="space-y-2 rounded-2xl border border-primary/20 bg-gradient-to-br from-card to-card/80 p-6 shadow-lg">
-              {transactions.map((tx, index) => {
-                const Icon = tx.icon
-                const isOutgoing = tx.type === 'sent'
+              {isLoadingTransactions ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="text-muted-foreground">Loading transactions...</div>
+                </div>
+              ) : transactions.length === 0 ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="text-muted-foreground">No transactions found</div>
+                </div>
+              ) : (
+                transactions.slice(0, 6).map((tx, index) => {
+                  // Simple logic: 
+                  // If user UPI ID is in sender → RED (debit/sent)
+                  // If user UPI ID is in receiver → BLUE (credit/received) 
+                  const isUserSender = tx.type == "Debit";
+                  const isDebit = isUserSender; // If user is sender = debit (red)
+                  const Icon = isDebit ? ArrowUpRight : ArrowDownLeft
+                  
+                  // Determine the "from" and "to" display
+                  let fromDisplay, toDisplay;
+                  if (isDebit) {
+                    // User is sending money
+                    fromDisplay = "You";
+                    toDisplay = tx.otherPartyName || tx.receiver_upiid;
+                  } else {
+                    // User is receiving money  
+                    fromDisplay = tx.otherPartyName || tx.sender_upiid;
+                    toDisplay = "You";
+                  }
 
-                return (
-                  <div key={tx.id} className={`flex items-center justify-between py-4 ${index !== transactions.length - 1 ? 'border-b border-border/50' : ''}`}>
-                    <div className="flex items-center gap-4">
-                      <div className={`rounded-full p-3 ${isOutgoing ? 'bg-destructive/10' : 'bg-primary/10'}`}>
-                        <Icon className={`h-5 w-5 ${isOutgoing ? 'text-destructive' : 'text-primary'}`} />
+                  return (
+                    <div key={tx.id} className={`flex items-center justify-between py-4 ${index !== Math.min(transactions.length, 6) - 1 ? 'border-b border-border/50' : ''} hover:bg-muted/30 transition-colors rounded-lg px-2`}>
+                      <div className="flex items-center gap-4">
+                        <div className={`rounded-full p-3 ${isDebit ? 'bg-destructive/10' : 'bg-primary/10'} shadow-sm`}>
+                          <Icon className={`h-5 w-5 ${isDebit ? 'text-destructive' : 'text-primary'}`} />
+                        </div>
+
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className={`font-semibold ${isDebit ? 'text-destructive' : 'text-primary'}`}>{fromDisplay}</span>
+                            <ArrowRight className="h-3 w-3 text-muted-foreground" />
+                            <span className={`font-semibold ${isDebit ? 'text-primary' : 'text-destructive'}`}>{toDisplay}</span>
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            UPI: {isDebit ? tx.receiver_upiid : tx.sender_upiid} • {isDebit ? 'Money sent' : 'Money received'}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {tx.date}
+                          </p>
+                        </div>
                       </div>
 
-                      <div>
-                        <p className="font-semibold text-foreground">{tx.name}</p>
-                        <p className="text-xs text-muted-foreground">{tx.description}</p>
+                      <div className="text-right">
+                        <p className={`font-bold text-lg ${isDebit ? 'text-destructive' : 'text-primary'}`}>
+                          {isDebit ? '- ₹' : '+ ₹'}{tx.amount}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {tx.date}
+                        </p>
                       </div>
                     </div>
-
-                    <div className="text-right">
-                      <p className={`font-bold ${isOutgoing ? 'text-destructive' : 'text-primary'}`}>
-                        {tx.amount}
-                      </p>
-                      <p className="text-xs text-muted-foreground">{tx.time}</p>
-                    </div>
-                  </div>
-                )
-              })}
+                  )
+                })
+              )}
+              
+              {transactions.length > 0 && (
+                <div className="pt-4 border-t border-border/30 text-center">
+                  <a href="/transactions">
+                    <Button
+                      variant="ghost"
+                      className="text-sm text-primary hover:text-primary/80 hover:bg-primary/10 font-semibold px-4 py-2 rounded-lg transition-colors"
+                    >
+                      View All Transactions →
+                    </Button>
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>

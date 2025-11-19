@@ -136,7 +136,7 @@ const page = () => {
             {/* Amount */}
             <div className="space-y-3">
               <label className="block text-sm font-medium text-foreground">
-                Initial Amount
+                Deposit Amount
               </label>
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-primary">
